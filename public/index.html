@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindSpace - Mental Health Support Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-4"></i>
+                <span>YOU</span>
+                <i class="fa-solid fa-quote-right"></i>
+            </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item"><a href="#home" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="#resources" class="nav-link">Resources</a></li>
+                <li class="nav-item"><a href="#journal" class="nav-link">Journal</a></li>
+                <li class="nav-item"><a href="#forum" class="nav-link">Forum</a></li>
+                <li class="nav-item"><a href="#mood-tracker" class="nav-link">Mood Tracker</a></li>
+                <li class="nav-item"><a href="#chat" class="nav-link">Chat</a></li>
+                <li class="nav-item"><button class="btn-login" onclick="showAuthModal()">Login</button></li>
+            </ul>
+            <div class="hamburger" id="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Your Safe Space for <span class="highlight">Mental Wellness</span></h1>
+            <p>A supportive platform where students can access mental health resources, share feelings anonymously, and connect with verified counselors.</p>
+            <div class="hero-buttons">
+                <button class="btn-primary" onclick="showAuthModal()">Get Started</button>
+                <button class="btn-secondary" onclick="scrollToSection('resources')">Browse Resources</button>
+            </div>
+            <div class="hero-stats">
+                <div class="stat"><h3>24/7</h3><p>Support Available</p></div>
+                <div class="stat"><h3>100%</h3><p>Anonymous</p></div>
+                <div class="stat"><h3>Safe</h3><p>Environment</p></div>
+                <div class="stat"><h3>Free</h3><p>For Students</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section id="resources" class="resources">
+        <div class="container">
+            <h2>Mental Health Resources</h2>
+            <p>Curated articles, videos, and guides to support your mental wellness journey</p>
+            
+            <div class="resource-filters">
+                <button class="filter-btn active" data-category="all">All</button>
+                <button class="filter-btn" data-category="stress">Stress</button>
+                <button class="filter-btn" data-category="anxiety">Anxiety</button>
+                <button class="filter-btn" data-category="sleep">Sleep</button>
+                <button class="filter-btn" data-category="mindfulness">Mindfulness</button>
+            </div>
+
+            <div class="resources-grid" id="resources-grid">
+                <!-- Resources will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Journal Section -->
+    <section id="journal" class="journal">
+        <div class="container">
+            <h2>Anonymous Feelings Wall</h2>
+            <p>Share your thoughts and feelings anonymously. Connect with others who understand your journey.</p>
+            
+            <button class="btn-primary" onclick="showJournalModal()">
+                <i class="fas fa-plus"></i> Share Your Feelings
+            </button>
+
+            <div class="journal-posts" id="journal-posts">
+                <!-- Journal posts will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Forum Section -->
+    <section id="forum" class="forum">
+        <div class="container">
+            <h2>Peer Support Forum</h2>
+            <p>Join group discussions and connect with peers facing similar challenges</p>
+            
+            <button class="btn-primary" onclick="showForumModal()">
+                <i class="fas fa-plus"></i> Create Discussion
+            </button>
+
+            <div class="forum-topics" id="forum-topics">
+                <!-- Forum topics will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Mood Tracker Section -->
+    <section id="mood-tracker" class="mood-tracker">
+        <div class="container">
+            <h2>Mood Tracker</h2>
+            <p>Track your daily mood and wellness patterns</p>
+            
+            <div class="mood-tracker-content">
+                <div class="mood-input">
+                    <h3>How are you feeling today?</h3>
+                    <div class="mood-slider">
+                        <label>Mood (1-10):</label>
+                        <input type="range" id="mood-range" min="1" max="10" value="5">
+                        <span id="mood-value">5</span>
+                    </div>
+                    <div class="mood-slider">
+                        <label>Energy (1-10):</label>
+                        <input type="range" id="energy-range" min="1" max="10" value="5">
+                        <span id="energy-value">5</span>
+                    </div>
+                    <div class="mood-slider">
+                        <label>Stress (1-10):</label>
+                        <input type="range" id="stress-range" min="1" max="10" value="5">
+                        <span id="stress-value">5</span>
+                    </div>
+                    <textarea id="mood-note" placeholder="Any notes about your day?"></textarea>
+                    <button class="btn-primary" onclick="saveMoodEntry()">Save Entry</button>
+                </div>
+                
+                <div class="mood-history" id="mood-history">
+                    <!-- Mood history will be displayed here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chat Section -->
+    <section id="chat" class="chat">
+        <div class="container">
+            <h2>Chat with Counselors</h2>
+            <p>Private, confidential conversations with verified counselors and peer mentors</p>
+            
+            <div class="chat-container">
+                <div class="chat-sidebar">
+                    <h3>Available Counselors</h3>
+                    <div class="counselor-list" id="counselor-list">
+                        <!-- Counselors will be loaded here -->
+                    </div>
+                </div>
+                
+                <div class="chat-main">
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="welcome-message">
+                            <p>Welcome to the counselor chat. Select a counselor to start a conversation.</p>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" id="message-input" placeholder="Type your message...">
+                        <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Section -->
+    <section class="emergency">
+        <div class="container">
+            <h2>Need Immediate Help?</h2>
+            <p>If you're experiencing a mental health emergency, please reach out for immediate support.</p>
+            <div class="emergency-contacts">
+                <div class="emergency-card">
+                    <h3>Crisis Hotline</h3>
+                    <p class="emergency-number">988</p>
+                    <p>24/7 Crisis Support</p>
+                </div>
+                <div class="emergency-card">
+                    <h3>Campus Counseling</h3>
+                    <p class="emergency-number">Available</p>
+                    <p>On-campus support</p>
+                </div>
+                <div class="emergency-card">
+                    <h3>Emergency</h3>
+                    <p class="emergency-number">911</p>
+                    <p>Immediate emergency</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Auth Modal -->
+    <div id="auth-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('auth-modal')">&times;</span>
+            <div class="auth-tabs">
+                <button class="tab-btn active" onclick="showTab('login')">Login</button>
+                <button class="tab-btn" onclick="showTab('register')">Register</button>
+                <button class="tab-btn" onclick="showTab('admin')">Admin</button>
+            </div>
+            
+            <div id="login" class="tab-content active">
+                <h2>Student Login</h2>
+                <form onsubmit="login(event)">
+                    <input type="email" placeholder="University Email" required>
+                    <input type="password" placeholder="Password" required>
+                    <button type="submit" class="btn-primary">Login</button>
+                </form>
+            </div>
+            
+            <div id="register" class="tab-content">
+                <h2>Student Registration</h2>
+                <form onsubmit="register(event)">
+                    <input type="text" placeholder="First Name" required>
+                    <input type="text" placeholder="Last Name" required>
+                    <input type="email" placeholder="University Email" required>
+                    <select required>
+                        <option value="">Select University</option>
+                        <option value="mit">MIT</option>
+                        <option value="stanford">Stanford</option>
+                        <option value="berkeley">UC Berkeley</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <select required>
+                        <option value="">Academic Year</option>
+                        <option value="freshman">Freshman</option>
+                        <option value="sophomore">Sophomore</option>
+                        <option value="junior">Junior</option>
+                        <option value="senior">Senior</option>
+                        <option value="graduate">Graduate</option>
+                    </select>
+                    <input type="password" placeholder="Password" required>
+                    <input type="password" placeholder="Confirm Password" required>
+                    <button type="submit" class="btn-primary">Register</button>
+                </form>
+            </div>
+            
+            <div id="admin" class="tab-content">
+                <h2>Admin Login</h2>
+                <form onsubmit="adminLogin(event)">
+                    <input type="email" placeholder="Admin Email" required>
+                    <input type="password" placeholder="Admin Password" required>
+                    <button type="submit" class="btn-primary">Admin Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Journal Modal -->
+    <div id="journal-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('journal-modal')">&times;</span>
+            <h2>Share Your Feelings</h2>
+            <form onsubmit="submitJournalEntry(event)">
+                <select id="mood-select" required>
+                    <option value="">How are you feeling?</option>
+                    <option value="positive">Positive</option>
+                    <option value="mixed">Mixed</option>
+                    <option value="negative">Struggling</option>
+                </select>
+                <textarea id="journal-content" placeholder="Share your thoughts..." required></textarea>
+                <button type="submit" class="btn-primary">Share Anonymously</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Forum Modal -->
+    <div id="forum-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('forum-modal')">&times;</span>
+            <h2>Create Discussion</h2>
+            <form onsubmit="submitForumTopic(event)">
+                <input type="text" id="forum-title" placeholder="Discussion Title" required>
+                <select id="forum-category" required>
+                    <option value="">Select Category</option>
+                    <option value="academic">Academic Stress</option>
+                    <option value="social">Social Issues</option>
+                    <option value="anxiety">Anxiety Support</option>
+                    <option value="depression">Depression Support</option>
+                    <option value="general">General Discussion</option>
+                </select>
+                <textarea id="forum-content" placeholder="Start the discussion..." required></textarea>
+                <button type="submit" class="btn-primary">Create Discussion</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js" defer></script>
+</body>
+</html>

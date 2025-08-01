@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - 4YOU</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .admin-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+        }
+        
+        .admin-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .admin-section h3 {
+            margin-bottom: 1.5rem;
+            color: #1e293b;
+        }
+        
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .admin-table th,
+        .admin-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .admin-table th {
+            background: #f8fafc;
+            font-weight: 600;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-small {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .btn-edit {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1><i class="fas fa-shield-alt"></i> Admin Dashboard</h1>
+            <p>Manage users, content, and monitor platform activity</p>
+            <button class="btn-secondary" onclick="logout()" style="float: right;">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="user-count">0</div>
+                <div>Total Students</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="journal-count">0</div>
+                <div>Journal Entries</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="forum-count">0</div>
+                <div>Forum Topics</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="resource-count">0</div>
+                <div>Resources</div>
+            </div>
+        </div>
+
+        <!-- Resource Management -->
+        <div class="admin-section">
+            <h3><i class="fas fa-book"></i> Resource Management</h3>
+            <button class="btn-primary" onclick="showAddResourceModal()">
+                <i class="fas fa-plus"></i> Add New Resource
+            </button>
+            <table class="admin-table" style="margin-top: 1rem;">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Type</th>
+                        <th>Category</th>
+                        <th>Views</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="resources-table">
+                    <!-- Resources will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- User Management -->
+        <div class="admin-section">
+            <h3><i class="fas fa-users"></i> User Management</h3>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>University</th>
+                        <th>Joined</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="users-table">
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: #64748b;">
+                            User data loading...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Content Moderation -->
+        <div class="admin-section">
+            <h3><i class="fas fa-flag"></i> Content Moderation</h3>
+            <div class="alert alert-info">
+                <p>Review flagged content and moderate community posts</p>
+            </div>
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Content Type</th>
+                        <th>Content Preview</th>
+                        <th>Reported By</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="moderation-table">
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: #64748b;">
+                            No flagged content at this time
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Add Resource Modal -->
+    <div id="add-resource-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('add-resource-modal')">&times;</span>
+            <h2>Add New Resource</h2>
+            <form onsubmit="addResource(event)">
+                <input type="text" placeholder="Resource Title" required>
+                <textarea placeholder="Description" required></textarea>
+                <select required>
+                    <option value="">Select Type</option>
+                    <option value="article">Article</option>
+                    <option value="video">Video</option>
+                    <option value="audio">Audio</option>
+                    <option value="guide">Guide</option>
+                </select>
+                <select required>
+                    <option value="">Select Category</option>
+                    <option value="stress">Stress Management</option>
+                    <option value="anxiety">Anxiety Support</option>
+                    <option value="sleep">Sleep & Rest</option>
+                    <option value="mindfulness">Mindfulness</option>
+                    <option value="academic">Academic Support</option>
+                </select>
+                <input type="text" placeholder="Duration (e.g., 5 min read)" required>
+                <textarea placeholder="Content" rows="6" required></textarea>
+                <button type="submit" class="btn-primary">Add Resource</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = '/';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAdminStats();
+            loadResources();
+        });
+
+        async function loadAdminStats() {
+            try {
+                const response = await fetch('/api/admin/stats', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const stats = await response.json();
+                    document.getElementById('user-count').textContent = stats.users || 0;
+                    document.getElementById('journal-count').textContent = stats.journalEntries || 0;
+                    document.getElementById('forum-count').textContent = stats.forumTopics || 0;
+                    document.getElementById('resource-count').textContent = stats.resources || 0;
+                } else if (response.status === 403) {
+                    alert('Admin access required');
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                console.error('Error loading admin stats:', error);
+            }
+        }
+
+        async function loadResources() {
+            try {
+                const response = await fetch('/api/resources');
+                const resources = await response.json();
+
+                const tableBody = document.getElementById('resources-table');
+                tableBody.innerHTML = resources.map(resource => `
+                    <tr>
+                        <td>${resource.title}</td>
+                        <td><span class="resource-type type-${resource.type}">${resource.type}</span></td>
+                        <td>${resource.category}</td>
+                        <td>${resource.views || 0}</td>
+                        <td class="action-buttons">
+                            <button class="btn-small btn-edit" onclick="editResource('${resource._id}')">Edit</button>
+                            <button class="btn-small btn-delete" onclick="deleteResource('${resource._id}')">Delete</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading resources:', error);
+            }
+        }
+
+        function showAddResourceModal() {
+            document.getElementById('add-resource-modal').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        async function addResource(event) {
+            event.preventDefault();
+            const form = event.target;
+
+            const resourceData = {
+                title: form.querySelector('input[placeholder="Resource Title"]').value,
+                description: form.querySelector('textarea[placeholder="Description"]').value,
+                type: form.querySelector('select').value,
+                category: form.querySelectorAll('select')[1].value,
+                duration: form.querySelector('input[placeholder*="Duration"]').value,
+                content: form.querySelector('textarea[placeholder="Content"]').value
+            };
+
+            try {
+                const response = await fetch('/api/resources', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(resourceData)
+                });
+
+                if (response.ok) {
+                    alert('Resource added successfully!');
+                    closeModal('add-resource-modal');
+                    form.reset();
+                    loadResources();
+                    loadAdminStats();
+                } else {
+                    const error = await response.json();
+                    alert('Error: ' + error.message);
+                }
+            } catch (error) {
+                console.error('Error adding resource:', error);
+                alert('Failed to add resource');
+            }
+        }
+
+        function editResource(resourceId) {
+            alert('Edit functionality would be implemented here for resource: ' + resourceId);
+        }
+
+        function deleteResource(resourceId) {
+            if (confirm('Are you sure you want to delete this resource?')) {
+                alert('Delete functionality would be implemented here for resource: ' + resourceId);
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        }
+
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
