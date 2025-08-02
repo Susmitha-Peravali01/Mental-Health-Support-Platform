@@ -1,0 +1,50 @@
+# 4YOU – Mental Health Support Platform for Students
+
+**4YOU** is a full-stack web application designed to provide mental health resources, emotional journaling, mood tracking, and access to counselor support — all in one safe and student-friendly space.
+
+---
+
+## 🧩 Features
+
+- 🧠 Curated Mental Health Resources (Articles, Videos, Audios)
+- 💬 Anonymous Journaling & Emotional Sharing
+- 💭 Peer Support Forum for Discussions
+- 📊 Mood, Energy & Stress Tracker
+- 👩‍⚕️ Connect with Verified Counselors
+- 🔐 Secure Authentication (Student/Admin)
+- 📱 Responsive UI for Web and Mobile
+
+
+
+## 🛠️ Tech Stack
+
+### Frontend:
+- HTML, CSS, JavaScript
+
+### Backend:
+- Node.js, Express.js
+- MongoDB + Mongoose
+
+### Deployment:
+- Render 
+- MongoDB Atlas (Database)
+
+---
+
+## 🗃️ API Endpoints
+
+Here are a few sample routes:
+
+| Method | Endpoint                     | Description              |
+|--------|------------------------------|--------------------------|
+| POST   | `/api/auth/register`         | Register new user       |
+| POST   | `/api/auth/login`            | Student login           |
+| POST   | `/api/auth/admin-login`      | Admin login             |
+| GET    | `/api/resources`             | Get mental health content |
+| POST   | `/api/journal`               | Submit journal entry    |
+| POST   | `/api/forum`                 | Create forum discussion |
+| GET    | `/api/counselors`            | List available counselors |
+
+---
+
+
